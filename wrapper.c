@@ -202,10 +202,7 @@ void _go_git_odb_writepack_free(git_odb_writepack *writepack)
 
 int _go_git_indexer_new(git_indexer **out, const char *path, unsigned int mode, git_odb *odb, void *progress_cb_payload)
 {
-	git_indexer_options indexer_options = GIT_INDEXER_OPTIONS_INIT;
-	indexer_options.progress_cb = (git_transfer_progress_cb)transferProgressCallback;
-	indexer_options.progress_cb_payload = progress_cb_payload;
-	return git_indexer_new(out, path, mode, odb, &indexer_options);
+	return git_indexer_new(out, path, mode, odb, (git_transfer_progress_cb)transferProgressCallback, progress_cb_payload);
 }
 
 /* EOF */
