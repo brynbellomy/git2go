@@ -1,5 +1,6 @@
 #include "_cgo_export.h"
 #include <git2.h>
+#include <git2/types.h>
 #include <git2/sys/odb_backend.h>
 #include <git2/sys/refdb_backend.h>
 
@@ -203,6 +204,37 @@ void _go_git_odb_writepack_free(git_odb_writepack *writepack)
 int _go_git_indexer_new(git_indexer **out, const char *path, unsigned int mode, git_odb *odb, void *progress_cb_payload)
 {
 	return git_indexer_new(out, path, mode, odb, (git_transfer_progress_cb)transferProgressCallback, progress_cb_payload);
+}
+
+int _go_git_transport_register(const char *scheme, void *ptr)
+{
+    return git_transport_register(scheme, (git_transport_cb)&CallbackGitCreateTransport, ptr);
+}
+
+void _go_git_init_transport_interface_wrapper(git_transport *transport) {
+    typedef int (*set_custom_headers_cb)(git_transport *transport, const git_strarray *custom_headers);
+    typedef int (*ls_cb)(const git_remote_head ***remoteHeads, size_t *numHeads, git_transport *transport);
+    typedef int (*is_connected_cb)(git_transport *transport);
+    typedef int (*connect_cb)(git_transport *transport, const char *url, git_cred_acquire_cb cred_acquire_cb, void *cred_acquire_payload, const git_proxy_options *proxy_opts, int direction, int flags);
+    typedef int (*negotiate_fetch_cb)(git_transport *transport, git_repository *repo, const git_remote_head * const *refs, size_t count);
+    typedef int (*download_pack_cb)(git_transport *transport, git_repository *repo, git_transfer_progress *stats, git_transfer_progress_cb progress_cb, void *progress_payload);
+    typedef void (*cancel_cb)(git_transport *transport);
+    typedef int (*close_cb)(git_transport *transport);
+    typedef void (*free_cb)(git_transport *transport);
+
+    transport->set_custom_headers = (set_custom_headers_cb)transportSetCustomHeadersCallback;
+    transport->negotiate_fetch = (negotiate_fetch_cb)transportNegotiateFetchCallback;
+    transport->ls = (ls_cb)transportLsCallback;
+    transport->connect = (connect_cb)transportConnectCallback;
+    transport->download_pack = (download_pack_cb)transportDownloadPackCallback;
+    transport->is_connected = (is_connected_cb)transportIsConnectedCallback;
+    transport->cancel = (cancel_cb)transportCancelCallback;
+    transport->close = (close_cb)transportCloseCallback;
+    transport->free = (free_cb)transportFreeCallback;
+}
+
+int _go_git_call_progress_cb(git_transfer_progress_cb progress_cb, git_transfer_progress *stats, void *progress_payload) {
+    return progress_cb(stats, progress_payload);
 }
 
 /* EOF */
