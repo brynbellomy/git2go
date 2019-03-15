@@ -70,8 +70,8 @@ func newIndexEntryFromC(entry *C.git_index_entry) *IndexEntry {
 		return nil
 	}
 	return &IndexEntry{
-		IndexTime{int32(entry.ctime.Seconds), uint32(entry.ctime.Nanoseconds)},
-		IndexTime{int32(entry.mtime.Seconds), uint32(entry.mtime.Nanoseconds)},
+		IndexTime{int32(entry.ctime.seconds), uint32(entry.ctime.nanoseconds)},
+		IndexTime{int32(entry.mtime.seconds), uint32(entry.mtime.nanoseconds)},
 		Filemode(entry.mode),
 		uint32(entry.uid),
 		uint32(entry.gid),
@@ -82,10 +82,10 @@ func newIndexEntryFromC(entry *C.git_index_entry) *IndexEntry {
 }
 
 func populateCIndexEntry(source *IndexEntry, dest *C.git_index_entry) {
-	dest.ctime.Seconds = C.int32_t(source.Ctime.Seconds)
-	dest.ctime.Nanoseconds = C.uint32_t(source.Ctime.Nanoseconds)
-	dest.mtime.Seconds = C.int32_t(source.Mtime.Seconds)
-	dest.mtime.Nanoseconds = C.uint32_t(source.Mtime.Nanoseconds)
+	dest.ctime.seconds = C.int32_t(source.Ctime.Seconds)
+	dest.ctime.nanoseconds = C.uint32_t(source.Ctime.Nanoseconds)
+	dest.mtime.seconds = C.int32_t(source.Mtime.Seconds)
+	dest.mtime.nanoseconds = C.uint32_t(source.Mtime.Nanoseconds)
 	dest.mode = C.uint32_t(source.Mode)
 	dest.uid = C.uint32_t(source.Uid)
 	dest.gid = C.uint32_t(source.Gid)
