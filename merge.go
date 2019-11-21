@@ -27,6 +27,11 @@ func newAnnotatedCommitFromC(ptr *C.git_annotated_commit, r *Repository) *Annota
 	return mh
 }
 
+func (mh *AnnotatedCommit) Id() *Oid {
+	coid := C.git_annotated_commit_id(mh.ptr)
+	return newOidFromC(coid)
+}
+
 func (mh *AnnotatedCommit) Free() {
 	runtime.SetFinalizer(mh, nil)
 	C.git_annotated_commit_free(mh.ptr)
