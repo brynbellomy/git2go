@@ -36,9 +36,17 @@ jobs:
                   -G "Unix Makefiles" \
                   .. && \
                 cmake --build . &&
-                popd && popd &&
-                mkdir -p ./libgit2-static/${{ matrix.platform }} &&
-                mv vendor/libgit2/build/libgit2.* ./libgit2-static/${{ matrix.platform }}
+                popd && popd
+            - name: Move artifacts into place (Ubuntu)
+              if:  matrix.platform == 'ubuntu-latest'
+              run: |
+                mkdir -p ./libgit2-static/linux &&
+                mv vendor/libgit2/build/libgit2.* ./libgit2-static/linux
+            - name: Move artifacts into place (MacOS)
+              if:  matrix.platform == 'macos-latest'
+              run: |
+                mkdir -p ./libgit2-static/darwin &&
+                mv vendor/libgit2/build/libgit2.* ./libgit2-static/darwin
             - name: Install Python3 setup tools
               if:  matrix.platform == 'ubuntu-latest'
               run: sudo apt-get install python3-setuptools
