@@ -707,6 +707,15 @@ func (o *Remote) RefspecCount() uint {
 	return uint(count)
 }
 
+func (o *Remote) GetRefspec(n uint) *Refspec {
+	crefspec := C.git_remote_get_refspec(o.ptr, C.size_t(n))
+	runtime.KeepAlive(o)
+	if crefspec == nil {
+		return nil
+	}
+	return &Refspec{ptr: crefspec, remote: o}
+}
+
 func populateFetchOptions(options *C.git_fetch_options, opts *FetchOptions) {
 	C.git_fetch_init_options(options, C.GIT_FETCH_OPTIONS_VERSION)
 	if opts == nil {
