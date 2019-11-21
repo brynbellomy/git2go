@@ -1,0 +1,56 @@
+name: Build libgit2
+
+on: repository_dispatch
+              
+jobs:
+    build:
+        name: Build libgit2 for ${{ matrix.platform }}
+        strategy:
+            matrix:
+                platform: [ubuntu-latest, macos-latest]
+        runs-on: ${{ matrix.platform }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v1
+              with:
+                  submodules: true
+                  fetch-depth: 1
+            - name: Build libgit2
+              run: |
+                pushd vendor/libgit2 &&
+                mkdir -p install/lib &&
+                mkdir -p build &&
+                pushd build &&
+                cmake -DTHREADSAFE=ON \
+                  -DBUILD_CLAR=OFF \
+                  -DBUILD_SHARED_LIBS=OFF \
+                  -DCMAKE_C_FLAGS=-fPIC \
+                  -DUSE_SSH=OFF \
+                  -DCURL=OFF \
+                  -DUSE_HTTPS=OFF \
+                  -DUSE_BUNDLED_ZLIB=ON \
+                  -DUSE_EXT_HTTP_PARSER=OFF \
+                  -DCMAKE_BUILD_TYPE="RelWithDebInfo" \
+                  -DCMAKE_INSTALL_PREFIX=../install \
+                  -DWINHTTP=OFF \
+                  -G "$makefiles" \
+                  .. && \
+                cmake --build . &&
+                popd && popd
+            - name: Install Python3 setup tools
+              if:  matrix.platform == 'ubuntu-latest'
+              run: sudo apt-get install python3-setuptools
+            - name: Create PR
+              run: |
+                  pip3 install --requirement ./.github/scripts/requirements.txt
+                  ./.github/scripts/create-pull-request.py
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                PULL_REQUEST_BRANCH: static-builds
+                COMMIT_MESSAGE: Update libgit2 static library for ${{ matrix.platform  }}
+                PULL_REQUEST_TITLE: libgit2 static library for ${{ matrix.platform  }}
+                PULL_REQUEST_BODY: Auto-generated pull request to build libgit2 for ${{ matrix.platform }}
+ 
+
+
+
