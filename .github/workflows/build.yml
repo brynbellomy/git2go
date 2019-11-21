@@ -37,8 +37,8 @@ jobs:
                   .. && \
                 cmake --build . &&
                 popd && popd &&
-                mkdir -p ./libgit-static/${{ matrix.platform }} &&
-                mv vendor/libgit2/build/libgit2.* ./libgit-static/${{ matrix.platform }}
+                mkdir -p ./libgit2-static/${{ matrix.platform }} &&
+                mv vendor/libgit2/build/libgit2.* ./libgit2-static/${{ matrix.platform }}
             - name: Install Python3 setup tools
               if:  matrix.platform == 'ubuntu-latest'
               run: sudo apt-get install python3-setuptools
