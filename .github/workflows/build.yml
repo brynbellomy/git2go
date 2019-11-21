@@ -1,6 +1,6 @@
 name: Build libgit2
 
-on: repository_dispatch
+on: push
               
 jobs:
     build:
