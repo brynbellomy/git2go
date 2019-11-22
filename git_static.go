@@ -3,7 +3,7 @@
 package git
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/vendor/libgit2/include
+#cgo CFLAGS: -I${SRCDIR}/include
 #cgo linux LDFLAGS: -L${SRCDIR}/libgit2-static/linux -lgit2
 #cgo linux pkg-config: --static ${SRCDIR}/libgit2-static/linux/libgit2.pc
 #cgo darwin LDFLAGS: -L${SRCDIR}/libgit2-static/darwin -lgit2
