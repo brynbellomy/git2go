@@ -115,6 +115,21 @@ func (repo *Repository) CreateBranch(branchName string, target *Commit, force bo
 	return newReferenceFromC(ptr, repo).Branch(), nil
 }
 
+func (b *Branch) IsCheckedOut() (bool, error) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
+	ret := C.git_branch_is_checked_out(b.Reference.ptr)
+	runtime.KeepAlive(b.Reference)
+	switch ret {
+	case 1:
+		return true, nil
+	case 0:
+		return false, nil
+	}
+	return false, MakeGitError(ret)
+}
+
 func (b *Branch) Delete() error {
 
 	runtime.LockOSThread()
