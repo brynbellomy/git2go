@@ -101,6 +101,14 @@ jobs:
                 # This is necessary in order to push a commit to the repo
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
 
+            - uses: repo-sync/pull-request@v2
+              with:
+                source_branch: "static-builds"
+                destination_branch: "develop"
+                pr_title: Update static library for ${{ matrix.platform }}
+                pr_body: ":crown: Update static builds"
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+
 
 
 
