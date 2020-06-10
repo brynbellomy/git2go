@@ -1,13 +1,13 @@
 name: Build libgit2
 
 on: push
-              
+
 jobs:
     build:
         name: Build libgit2 for ${{ matrix.platform }}
         strategy:
             matrix:
-                platform: [ubuntu-latest, macos-latest]
+                platform: [ubuntu-latest, macos-latest, windows-latest]
         runs-on: ${{ matrix.platform }}
         steps:
             - name: Checkout
@@ -47,6 +47,11 @@ jobs:
               run: |
                 mkdir -p ./libgit2-static/darwin &&
                 mv vendor/libgit2/build/libgit2.* ./libgit2-static/darwin
+            - name: Move artifacts into place (Windows)
+              if:  matrix.platform == 'windows-latest'
+              run: |
+                mkdir -p ./libgit2-static/linux &&
+                mv vendor/libgit2/build/libgit2.* ./libgit2-static/windows
             - name: Install Python3 setup tools
               if:  matrix.platform == 'ubuntu-latest'
               run: sudo apt-get install python3-setuptools
@@ -57,10 +62,10 @@ jobs:
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 PULL_REQUEST_BRANCH: static-builds
-                COMMIT_MESSAGE: Update libgit2 static library for ${{ matrix.platform  }}
-                PULL_REQUEST_TITLE: libgit2 static library for ${{ matrix.platform  }}
+                COMMIT_MESSAGE: Update libgit2 static library for ${{ matrix.platform }}
+                PULL_REQUEST_TITLE: libgit2 static library for ${{ matrix.platform }}
                 PULL_REQUEST_BODY: Auto-generated pull request to build libgit2 for ${{ matrix.platform }}
- 
+
 
 
 
