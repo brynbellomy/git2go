@@ -103,7 +103,7 @@ jobs:
 
             - uses: repo-sync/pull-request@v2
               with:
-                source_branch: "static-builds"
+                source_branch: static-builds-${{ matrix.platform }}
                 destination_branch: "develop"
                 pr_title: Update static library for ${{ matrix.platform }}
                 pr_body: ":crown: Update static builds"
