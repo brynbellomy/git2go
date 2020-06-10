@@ -7,7 +7,7 @@ jobs:
         name: Build libgit2 for ${{ matrix.platform }}
         strategy:
             matrix:
-                platform: [ubuntu-latest, macos-latest, windows-latest]
+                platform: [ubuntu-latest, macos-latest]
         runs-on: ${{ matrix.platform }}
         steps:
             - name: Checkout
@@ -70,7 +70,7 @@ jobs:
                 # The arguments for the `git add` command (see the paragraph below for more info)
                 # Default: '.'
                 add: './libgit2-static'
-                author_name: Bryn bellomy
+                author_name: Bryn Bellomy
                 author_email: bryn.bellomy@gmail.com
 
                 # The local path to the directory where your repository is located. You should use actions/checkout first to set it up
