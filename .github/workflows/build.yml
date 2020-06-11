@@ -24,7 +24,7 @@ jobs:
                 cmake -DTHREADSAFE=ON \
                   -DBUILD_CLAR=OFF \
                   -DBUILD_SHARED_LIBS=OFF \
-                  -DCMAKE_C_FLAGS=-fPIC \
+                  -DCMAKE_C_FLAGS="-fPIC -fno-stack-check" \
                   -DUSE_SSH=OFF \
                   -DCURL=OFF \
                   -DUSE_HTTPS=OFF \
