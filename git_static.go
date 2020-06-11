@@ -6,6 +6,7 @@ package git
 #cgo CFLAGS: -I${SRCDIR}/include
 #cgo linux LDFLAGS: -L${SRCDIR}/libgit2-static/linux -lgit2
 #cgo linux pkg-config: --static ${SRCDIR}/libgit2-static/linux/libgit2.pc
+#cgo darwin CFLAGS: -fno-stack-check
 #cgo darwin LDFLAGS: -L${SRCDIR}/libgit2-static/darwin -lgit2
 #cgo darwin pkg-config: --static ${SRCDIR}/libgit2-static/darwin/libgit2.pc
 #cgo windows LDFLAGS: -L${SRCDIR}/libgit2-static/windows -lgit2 -lwinhttp
