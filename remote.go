@@ -918,11 +918,3 @@ func (o *Remote) Prune(callbacks *RemoteCallbacks) error {
 	return nil
 }
 
-func (o *Remote) Duplicate() (*Remote, error) {
-	cpy := &C.git_remote{}
-	ret := C.git_remote_dup(&cpy, o.ptr)
-	if ret < 0 {
-		return nil, MakeGitError(ret)
-	}
-	return &Remote{ptr: cpy, repo: o.repo}, nil
-}
